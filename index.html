@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Abdulrahman Hussein &middot; Web Developer</title>
+    <meta name="description" content="Web developer building clean, purposeful interfaces." />
+    <meta property="og:title" content="Abdulrahman Hussein" />
+    <meta property="og:description" content="Web developer building clean, purposeful interfaces." />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Nunito:wght@400;500&display=swap" rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        :root {
+            --bg: #E6E7DA;
+            --avatar-bg: #d4d5c9;
+            --text: #1a1a1a;
+            --text-muted: #555555;
+            --link-border: #c8c9bd;
+            --link-hover: rgba(0, 0, 0, 0.05);
+            --accent-cool: #2563eb;
+            --glow: rgba(0, 0, 0, 0.06);
+            --radius: 14px;
+            --radius-full: 50%;
+            --font: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            --font-display: 'DM Serif Display', var(--font);
+            --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 32px;
+            --space-xl: 48px;
+            --space-2xl: clamp(32px, 5vw, 56px);
+        }
+        ::selection {
+            background: rgba(0, 0, 0, 0.15);
+            color: var(--text);
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: clamp(32px, 6vw, 64px) clamp(16px, 4vw, 24px) env(safe-area-inset-bottom);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+        .page {
+            width: 100%;
+            max-width: 480px;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2xl);
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+        @keyframes rise {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .profile {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-sm);
+            animation: rise 0.6s var(--ease-out) both;
+            perspective: 600px;
+        }
+        @keyframes settle {
+            0% { transform: scale(1); }
+            40% { transform: scale(1.06); }
+            100% { transform: scale(1); }
+        }
+        .avatar-wrap {
+            display: block;
+            width: 88px;
+            height: 88px;
+            border-radius: var(--radius-full);
+            background: var(--avatar-bg);
+            box-shadow: 0 0 0 1px oklch(0.75 0.03 100 / 0.4), 0 0 30px var(--glow);
+            overflow: hidden;
+            transition: transform 0.15s var(--ease-out), box-shadow 0.3s var(--ease-out);
+            animation: settle 0.6s var(--ease-out) 0.8s both;
+            transform-style: preserve-3d;
+            will-change: transform;
+        }
+        .profile:hover .avatar-wrap {
+            box-shadow: 0 0 0 1px oklch(0.75 0.03 100 / 0.4), 0 0 40px var(--glow);
+        }
+        .avatar {
+            width: 100%;
+            height: 100%;
+            display: block;
+            padding: 18px;
+            object-fit: contain;
+        }
+        .profile-text {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xs);
+        }
+        .name {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+            line-height: 1.3;
+            color: var(--text);
+            text-wrap: balance;
+        }
+        .bio {
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+        .links {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(8px, 1.5vw, 12px);
+        }
+        .link {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 18px;
+            border-radius: var(--radius);
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            font-size: 0.92rem;
+            transition: transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out);
+            animation: rise 0.5s var(--ease-out) both;
+            animation-delay: calc(var(--i, 0) * 0.04s);
+            border: 2px solid #1a1a1a;
+            background: #ffffff;
+            box-shadow: 6px 6px 0 #1a1a1a;
+            min-height: 56px;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .link:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 8px 8px 0 #1a1a1a;
+        }
+        .link:active {
+            transform: translate(2px, 2px);
+            box-shadow: 3px 3px 0 #1a1a1a;
+        }
+        .link-icon {
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--icon-bg, oklch(0.9 0.01 90));
+            color: var(--icon-fg, var(--text-muted));
+            transition: transform 0.25s var(--ease-out);
+        }
+        .link-icon svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+        }
+        .link:hover .link-icon {
+            transform: scale(1.1);
+        }
+        .link-label {
+            flex: 1;
+            text-align: center;
+            padding-right: 0;
+        }
+        .link-copy {
+            flex-shrink: 0;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            opacity: 0.4;
+            border-radius: 6px;
+            transition: opacity 0.2s var(--ease-out), background 0.2s var(--ease-out), color 0.2s var(--ease-out);
+            cursor: pointer;
+            z-index: 1;
+        }
+        .link-copy:hover {
+            opacity: 1;
+            color: var(--text);
+        }
+        .link-copy.copied {
+            opacity: 1;
+            color: #25d366;
+        }
+        .link-copy svg {
+            width: 16px;
+            height: 16px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--text);
+            color: var(--bg);
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-family: var(--font);
+            font-size: 0.85rem;
+            font-weight: 500;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s var(--ease-out), transform 0.3s var(--ease-out);
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        .link:focus-visible {
+            outline: 2px solid var(--accent-cool);
+            outline-offset: 3px;
+        }
+        .footer {
+            text-align: center;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            animation: rise 0.6s var(--ease-out) 0.2s both;
+            padding-top: var(--space-sm);
+            padding-bottom: var(--space-xs);
+        }
+        .footer a {
+            color: var(--text-muted);
+            text-decoration: none;
+            position: relative;
+        }
+        .footer a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            width: 0;
+            height: 1px;
+            background: var(--accent-cool);
+            transition: width 0.25s var(--ease-out), left 0.25s var(--ease-out);
+        }
+        .footer a:hover {
+            color: var(--accent-cool);
+        }
+        .footer a:hover::after {
+            width: 100%;
+            left: 0;
+        }
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: var(--space-sm);
+        }
+        .social-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            color: #1C1D1D;
+            transition: color 0.2s var(--ease-out), transform 0.2s var(--ease-out);
+        }
+        .social-icon:hover {
+            color: #000000;
+        }
+        .social-icon svg {
+            width: 26px;
+            height: 26px;
+            fill: currentColor;
+        }
+        @media (max-width: 420px) {
+            .page {
+                gap: clamp(32px, 8vw, 48px);
+            }
+            .avatar-wrap {
+                width: 76px;
+                height: 76px;
+                animation-duration: 0.5s;
+                animation-delay: 0.6s;
+            }
+            .avatar {
+                padding: 16px;
+            }
+            .name {
+                font-size: 1.3rem;
+            }
+            .link {
+                padding: 14px 16px;
+                font-size: 0.88rem;
+                min-height: 50px;
+                gap: 12px;
+            }
+            .link-icon {
+                width: 36px;
+                height: 36px;
+            }
+            .link-icon svg {
+                width: 20px;
+                height: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+
+        <header class="profile">
+            <span class="avatar-wrap">
+                <img
+                    class="avatar"
+                    src="A+H Logo.svg"
+                    alt="Abdulrahman Hussein"
+                    id="avatar"
+                />
+            </span>
+            <div class="profile-text">
+                <h1 class="name" id="name">Abdulrahman Hussein</h1>
+                <p class="bio" id="bio">Web Developer</p>
+            </div>
+            <div class="social-icons">
+                <a href="https://wa.me/201062120142" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="WhatsApp">
+                    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+                </a>
+                <a href="https://www.linkedin.com/in/abdulllrahmandev/" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="LinkedIn">
+                    <svg viewBox="0 0 24 24"><path d="M6.963 8.177H3.554V20.6h3.409V8.177zM5.259 6.729c1.104 0 2.001-.897 2.001-2.001 0-1.104-.897-2.001-2.001-2.001-1.105 0-2.001.897-2.001 2.001 0 1.104.896 2.001 2.001 2.001zM20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286z"/></svg>
+                </a>
+                <a href="https://github.com/AbdulllrahmanDev" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="GitHub">
+                    <svg viewBox="0 0 24 24"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+                </a>
+                <a href="https://www.instagram.com/lllsfe" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Instagram">
+                    <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069M12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324M12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8m6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+                </a>
+            </div>
+        </header>
+
+        <nav class="links" id="links" aria-label="Social links"></nav>
+
+        <footer class="footer">
+            Made By Abdulrahman
+        </footer>
+
+    </div>
+
+    <script>
+        var LINKS = [
+            {
+                label: 'GitHub',
+                url: 'https://github.com/AbdulllrahmanDev',
+                fg: '#ffffff',
+                bg: '#24292e',
+                icon: '<svg viewBox="0 0 24 24"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>'
+            },
+            {
+                label: 'LinkedIn',
+                url: 'https://www.linkedin.com/in/abdulllrahmandev/',
+                fg: '#ffffff',
+                bg: '#0A66C2',
+                icon: '<svg viewBox="3 0 19 22"><path d="M6.963 8.177H3.554V20.6h3.409V8.177zM5.259 6.729c1.104 0 2.001-.897 2.001-2.001 0-1.104-.897-2.001-2.001-2.001-1.105 0-2.001.897-2.001 2.001 0 1.104.896 2.001 2.001 2.001zM20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286z"/></svg>'
+            },
+            {
+                label: 'WhatsApp',
+                url: 'https://wa.me/201062120142',
+                fg: '#ffffff',
+                bg: '#25d366',
+                icon: '<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>'
+            },
+            {
+                label: 'Instagram',
+                url: 'https://www.instagram.com/lllsfe',
+                fg: '#ffffff',
+                bg: 'linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)',
+                icon: '<svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069M12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324M12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8m6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>'
+            }
+        ];
+
+        var nameEl = document.getElementById('name');
+        var bioEl = document.getElementById('bio');
+        var avatarEl = document.getElementById('avatar');
+        var linksEl = document.getElementById('links');
+
+        nameEl.textContent = 'Abdulrahman Hussein';
+        bioEl.textContent = 'Web Developer';
+        avatarEl.src = 'A+H Logo.svg';
+
+        var copyIcon = '<svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+        var checkIcon = '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
+
+        for (var i = 0; i < LINKS.length; i++) {
+            var link = LINKS[i];
+            var a = document.createElement('a');
+            a.className = 'link';
+            a.href = link.url;
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+            a.style.setProperty('--icon-fg', link.fg);
+            a.style.setProperty('--icon-bg', link.bg);
+            a.style.setProperty('--i', String(i));
+            a.innerHTML =
+                '<span class="link-icon">' + link.icon + '</span>' +
+                '<span class="link-label">' + link.label + '</span>' +
+                '<span class="link-copy" data-url="' + link.url + '">' + copyIcon + '</span>';
+            linksEl.appendChild(a);
+        }
+
+        var toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.textContent = 'Copied!';
+        document.body.appendChild(toast);
+
+        var toastTimeout;
+        document.querySelectorAll('.link-copy').forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var url = this.getAttribute('data-url');
+                var self = this;
+                navigator.clipboard.writeText(url).then(function() {
+                    self.innerHTML = checkIcon;
+                    self.classList.add('copied');
+                    toast.classList.add('show');
+                    clearTimeout(toastTimeout);
+                    toastTimeout = setTimeout(function() {
+                        toast.classList.remove('show');
+                    }, 1500);
+                    setTimeout(function() {
+                        self.innerHTML = copyIcon;
+                        self.classList.remove('copied');
+                    }, 1500);
+                });
+            });
+        });
+
+        var avatarWrap = document.querySelector('.avatar-wrap');
+        var profile = document.querySelector('.profile');
+        var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (!prefersReducedMotion && avatarWrap) {
+            var ticking = false;
+            var targetRotateX = 0;
+            var targetRotateY = 0;
+            var currentRotateX = 0;
+            var currentRotateY = 0;
+
+            profile.addEventListener('mousemove', function(e) {
+                var rect = avatarWrap.getBoundingClientRect();
+                var centerX = rect.left + rect.width / 2;
+                var centerY = rect.top + rect.height / 2;
+                var distX = (e.clientX - centerX) / (rect.width / 2);
+                var distY = (e.clientY - centerY) / (rect.height / 2);
+                targetRotateX = -distY * 12;
+                targetRotateY = distX * 12;
+                if (!ticking) {
+                    ticking = true;
+                    requestAnimationFrame(updateAvatar);
+                }
+            });
+
+            profile.addEventListener('mouseleave', function() {
+                targetRotateX = 0;
+                targetRotateY = 0;
+                if (!ticking) {
+                    ticking = true;
+                    requestAnimationFrame(updateAvatar);
+                }
+            });
+
+            function updateAvatar() {
+                currentRotateX += (targetRotateX - currentRotateX) * 0.15;
+                currentRotateY += (targetRotateY - currentRotateY) * 0.15;
+                if (Math.abs(currentRotateX - targetRotateX) < 0.01 && Math.abs(currentRotateY - targetRotateY) < 0.01) {
+                    currentRotateX = targetRotateX;
+                    currentRotateY = targetRotateY;
+                    ticking = false;
+                }
+                avatarWrap.style.transform = 'rotateX(' + currentRotateX + 'deg) rotateY(' + currentRotateY + 'deg) scale(1.04)';
+                if (ticking) {
+                    requestAnimationFrame(updateAvatar);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
