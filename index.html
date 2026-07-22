@@ -160,6 +160,24 @@
             color: #0f172a;
         }
 
+        /* Vibrant Blue Cursor for TextType Component in Light and Dark Modes */
+        .text-type-cursor {
+            color: #0284c7;
+            font-weight: 800;
+            margin-left: 3px;
+            display: inline-block;
+            animation: cursorBlink 0.65s infinite alternate ease-in-out;
+        }
+
+        body.light-mode .text-type-cursor {
+            color: #0284c7;
+        }
+
+        @keyframes cursorBlink {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
         body.light-mode #bg-canvas {
             opacity: 0;
         }
@@ -1475,13 +1493,9 @@
             </h1>
 
             <div class="bio-terminal">
-                <span class="bio-line-prefix">
-                    <span class="bio-prompt">$</span>
-                    <span class="bio-prefix">const role =</span>
-                </span>
                 <span class="bio-line-text">
                     <span class="bio-text" id="typingBio"></span>
-                    <span class="cursor"></span>
+                    <span class="text-type-cursor" id="typingCursor">|</span>
                 </span>
             </div>
 
@@ -1819,45 +1833,55 @@
             });
         });
 
-        // Bio Typing Loop with Rotating Titles
+        // React Bits TextType Component Animation Engine
         var phrases = [
-            '"Full-Stack Web Developer"',
-            '"React & Node.js Specialist"',
-            '"UI/UX & Frontend Architect"',
-            '"Open Source Contributor"'
+            "Full-Stack Web Developer",
+            "React & Node.js Specialist",
+            "UI/UX & Frontend Architect",
+            "Open Source Contributor"
         ];
         var phraseIndex = 0;
         var charIndex = 0;
         var isDeleting = false;
         var typingBioEl = document.getElementById('typingBio');
+        var typingSpeed = 65;
+        var deletingSpeed = 35;
+        var pauseDuration = 1800;
 
-        function typeLoop() {
+        function runTextTypeAnimation() {
+            if (!typingBioEl) return;
             var currentPhrase = phrases[phraseIndex];
+
             if (isDeleting) {
-                typingBioEl.textContent = currentPhrase.substring(0, charIndex - 1);
                 charIndex--;
+                typingBioEl.textContent = currentPhrase.substring(0, charIndex);
+
+                if (charIndex === 0) {
+                    isDeleting = false;
+                    phraseIndex = (phraseIndex + 1) % phrases.length;
+                    setTimeout(runTextTypeAnimation, 350);
+                    return;
+                }
+                setTimeout(runTextTypeAnimation, deletingSpeed);
             } else {
-                typingBioEl.textContent = currentPhrase.substring(0, charIndex + 1);
                 charIndex++;
+                typingBioEl.textContent = currentPhrase.substring(0, charIndex);
+
+                if (charIndex === currentPhrase.length) {
+                    isDeleting = true;
+                    setTimeout(runTextTypeAnimation, pauseDuration);
+                    return;
+                }
+
+                // Add human-like variable typing speed within range
+                var variableSpeed = typingSpeed + (Math.random() * 30 - 15);
+                setTimeout(runTextTypeAnimation, variableSpeed);
             }
-
-            var typeSpeed = isDeleting ? 35 : 75;
-
-            if (!isDeleting && charIndex === currentPhrase.length) {
-                typeSpeed = 2200;
-                isDeleting = true;
-            } else if (isDeleting && charIndex === 0) {
-                isDeleting = false;
-                phraseIndex = (phraseIndex + 1) % phrases.length;
-                typeSpeed = 400;
-            }
-
-            setTimeout(typeLoop, typeSpeed);
         }
 
-        document.addEventListener('DOMContentLoaded', function () {
-            typeLoop();
-        });
+        if (typingBioEl) {
+            setTimeout(runTextTypeAnimation, 400);
+        }
 
         // -----------------------------------------------------------
         // ULTRA-LIGHTWEIGHT OPTIMIZED GALAXY WEBGL SHADER
