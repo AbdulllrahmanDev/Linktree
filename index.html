@@ -283,6 +283,152 @@
             transition: all 0.3s var(--ease-out);
         }
 
+        /* Curved Marquee Status Overlay (React Bits CurvedLoop) */
+        .curved-marquee-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            z-index: 990;
+            pointer-events: none;
+            opacity: 0;
+            transform: translateY(-30px);
+            transition: opacity 0.45s var(--ease-out), transform 0.45s var(--ease-out);
+            background: linear-gradient(180deg, rgba(7, 9, 14, 0.95) 0%, rgba(7, 9, 14, 0.85) 75%, transparent 100%);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 10px 0 16px;
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        body.light-mode .curved-marquee-overlay {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(248, 250, 252, 0.88) 75%, transparent 100%);
+            box-shadow: 0 12px 36px rgba(2, 132, 199, 0.15);
+        }
+
+        .curved-marquee-overlay.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        /* Banner Overlay Centered Close Button Directly Below Text */
+        .banner-close-btn {
+            position: relative;
+            margin: 4px auto 0;
+            z-index: 1000;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            color: var(--text-primary);
+            cursor: pointer;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: all 0.25s var(--ease-out);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        body.light-mode .banner-close-btn {
+            background: rgba(255, 255, 255, 0.92);
+            border-color: rgba(0, 0, 0, 0.15);
+            color: #0f172a;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .banner-close-btn:hover {
+            background: rgba(16, 185, 129, 0.25);
+            border-color: rgba(16, 185, 129, 0.6);
+            transform: scale(1.1);
+        }
+
+        .banner-close-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        @media (max-width: 768px) {
+            .banner-close-btn {
+                width: 32px;
+                height: 32px;
+                margin-top: 2px;
+            }
+            .banner-close-btn svg {
+                width: 15px;
+                height: 15px;
+            }
+        }
+
+        .curved-marquee-wrapper {
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .curved-loop-svg {
+            width: 100%;
+            height: 85px;
+            overflow: visible;
+            display: block;
+        }
+
+        .banner-marquee-text {
+            font-family: var(--font-mono);
+            font-size: 24px;
+            font-weight: 700;
+            fill: var(--accent-emerald);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            filter: drop-shadow(0 2px 6px rgba(16, 185, 129, 0.4));
+        }
+
+        body.light-mode .banner-marquee-text {
+            fill: #047857;
+            filter: drop-shadow(0 2px 4px rgba(4, 120, 87, 0.2));
+        }
+
+        /* Status Badge Close X Morphing Icon */
+        .circular-status-badge .close-icon-wrap {
+            position: absolute;
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: scale(0.4) rotate(-90deg);
+            transition: all 0.35s var(--ease-out-back);
+            pointer-events: none;
+        }
+
+        .circular-status-badge.open .close-icon-wrap {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
+            pointer-events: auto;
+        }
+
+        .circular-status-badge.open .status-dot-wrap,
+        .circular-status-badge.open .circular-text-svg {
+            opacity: 0.15;
+            transition: opacity 0.3s ease;
+        }
+
+        .close-icon-wrap svg {
+            width: 22px;
+            height: 22px;
+            fill: var(--accent-emerald);
+        }
+
+        body.light-mode .close-icon-wrap svg {
+            fill: #059669;
+        }
+
         .circular-status-badge:hover {
             background: rgba(255, 255, 255, 0.08);
             border-color: rgba(16, 185, 129, 0.7);
@@ -983,6 +1129,26 @@
     <canvas id="bg-canvas"></canvas>
     <canvas id="light-bg-canvas"></canvas>
 
+    <!-- Curved Loop Status Banner Overlay (React Bits Style) -->
+    <div id="curvedMarqueeOverlay" class="curved-marquee-overlay">
+        <div class="curved-marquee-wrapper">
+            <svg class="curved-loop-svg" viewBox="0 0 1440 100">
+                <text id="measureTextEl" class="banner-marquee-text" style="visibility: hidden; opacity: 0; pointer-events: none;"></text>
+                <defs>
+                    <path id="bannerCurvePath" d="M -100,45 Q 720,105 1540,45" fill="none" stroke="transparent" />
+                </defs>
+                <text class="banner-marquee-text">
+                    <textPath id="bannerTextPath" href="#bannerCurvePath" startOffset="0%">
+                        AVAILABLE • FOR • WORK • AVAILABLE • FOR • WORK • AVAILABLE • FOR • WORK • AVAILABLE • FOR • WORK • 
+                    </textPath>
+                </text>
+            </svg>
+        </div>
+        <button class="banner-close-btn" id="bannerCloseBtn" title="Close Banner">
+            <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+    </div>
+
     <main class="page">
         
         <!-- Top Navigation Header Bar -->
@@ -993,10 +1159,13 @@
             </button>
 
             <!-- Circular Rotating Status Badge (Center) -->
-            <div class="circular-status-badge" title="Currently Available for Work">
+            <div class="circular-status-badge" id="statusBadgeBtn" title="Click to view status banner">
                 <span class="status-dot-wrap">
                     <span class="status-dot"></span>
                     <span class="status-ping"></span>
+                </span>
+                <span class="close-icon-wrap">
+                    <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
                 </span>
                 <svg class="circular-text-svg" viewBox="0 0 100 100">
                     <path id="circlePath" d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" fill="none" />
@@ -1250,6 +1419,85 @@
                 localStorage.setItem('theme', !isCurrentlyLight ? 'light' : 'dark');
             });
         }
+
+        // -----------------------------------------------------------
+        // SEAMLESS 100% INFINITE CURVED LOOP MARQUEE BANNER
+        // -----------------------------------------------------------
+        var statusBadgeBtn = document.getElementById('statusBadgeBtn');
+        var curvedOverlay = document.getElementById('curvedMarqueeOverlay');
+        var bannerTextPath = document.getElementById('bannerTextPath');
+        var measureTextEl = document.getElementById('measureTextEl');
+        
+        var bannerOffset = 0;
+        var unitWidth = 360;
+        var bannerAnimFrame;
+
+        function initMarqueeText() {
+            if (measureTextEl && bannerTextPath) {
+                var singleText = "AVAILABLE • FOR • WORK • ";
+                measureTextEl.textContent = singleText;
+                var measured = measureTextEl.getComputedTextLength();
+                if (measured > 0) unitWidth = measured;
+
+                var repeatedText = "";
+                for (var i = 0; i < 10; i++) {
+                    repeatedText += singleText;
+                }
+                bannerTextPath.textContent = repeatedText;
+            }
+        }
+
+        function animateBannerMarquee() {
+            if (bannerTextPath) {
+                bannerOffset -= 2.0;
+                if (bannerOffset <= -unitWidth) {
+                    bannerOffset += unitWidth;
+                }
+                bannerTextPath.setAttribute('startOffset', bannerOffset + 'px');
+            }
+            bannerAnimFrame = requestAnimationFrame(animateBannerMarquee);
+        }
+
+        function openStatusMarquee() {
+            initMarqueeText();
+            if (statusBadgeBtn) statusBadgeBtn.classList.add('open');
+            if (curvedOverlay) curvedOverlay.classList.add('active');
+            cancelAnimationFrame(bannerAnimFrame);
+            animateBannerMarquee();
+        }
+
+        function closeStatusMarquee() {
+            if (statusBadgeBtn) statusBadgeBtn.classList.remove('open');
+            if (curvedOverlay) curvedOverlay.classList.remove('active');
+            cancelAnimationFrame(bannerAnimFrame);
+        }
+
+        var bannerCloseBtn = document.getElementById('bannerCloseBtn');
+        if (bannerCloseBtn) {
+            bannerCloseBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                closeStatusMarquee();
+            });
+        }
+
+        if (statusBadgeBtn) {
+            statusBadgeBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (statusBadgeBtn.classList.contains('open')) {
+                    closeStatusMarquee();
+                } else {
+                    openStatusMarquee();
+                }
+            });
+        }
+
+        document.addEventListener('click', function(e) {
+            if (statusBadgeBtn && statusBadgeBtn.classList.contains('open')) {
+                if (!statusBadgeBtn.contains(e.target) && !curvedOverlay.contains(e.target)) {
+                    closeStatusMarquee();
+                }
+            }
+        });
 
         document.querySelectorAll('.copy-btn').forEach(function(btn) {
             btn.addEventListener('click', function(e) {
