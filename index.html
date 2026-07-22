@@ -265,6 +265,131 @@
             fill: currentColor;
         }
 
+        /* Resume / CV Action Menu */
+        .cv-menu-container {
+            position: relative;
+            z-index: 100;
+        }
+
+        .cv-menu-container #resumeToggleBtn {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cv-btn-icon {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.35s var(--ease-out-back), opacity 0.3s ease;
+        }
+
+        .cv-icon-main {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
+        }
+
+        .cv-icon-close {
+            opacity: 0;
+            transform: scale(0.4) rotate(-90deg);
+        }
+
+        .cv-menu-container.open .cv-icon-main {
+            opacity: 0;
+            transform: scale(0.4) rotate(90deg);
+        }
+
+        .cv-menu-container.open .cv-icon-close {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
+        }
+
+        /* Dropdown Actions Menu Container */
+        .cv-dropdown-menu {
+            position: absolute;
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            padding: 0;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.35s var(--ease-out-back);
+        }
+
+        /* 100% Horizontal Expansion Across Top Navigation Header Bar */
+        .cv-dropdown-menu {
+            position: absolute;
+            top: 0;
+            right: 48px;
+            display: flex;
+            flex-direction: row-reverse;
+            align-items: center;
+            gap: 8px;
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            padding: 0;
+            opacity: 0;
+            transform: translateX(18px) scale(0.85);
+            pointer-events: none;
+            transition: all 0.35s var(--ease-out-back);
+        }
+
+        .cv-menu-container.open .cv-dropdown-menu {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+            pointer-events: auto;
+        }
+
+        @media (max-width: 768px) {
+            .cv-dropdown-menu {
+                right: 44px;
+                gap: 6px;
+            }
+        }
+
+        .cv-action-circle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            color: var(--text-primary);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+            cursor: pointer;
+            transition: all 0.25s var(--ease-out-back);
+        }
+
+        body.light-mode .cv-action-circle {
+            background: rgba(255, 255, 255, 0.88);
+            border-color: rgba(0, 0, 0, 0.12);
+            color: #0f172a;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        }
+
+        .cv-action-circle:hover {
+            background: rgba(56, 189, 248, 0.2);
+            border-color: rgba(56, 189, 248, 0.5);
+            color: var(--accent-cyan);
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(56, 189, 248, 0.3);
+        }
+
+        body.light-mode .cv-action-circle:hover {
+            background: #ffffff;
+            border-color: rgba(2, 132, 199, 0.45);
+            color: #0284c7;
+            transform: scale(1.1);
+            box-shadow: 0 6px 18px rgba(2, 132, 199, 0.25);
+        }
+
         /* Circular Rotating Status Badge (React Bits CircularText style) */
         .circular-status-badge {
             position: relative;
@@ -1177,10 +1302,25 @@
                 </svg>
             </div>
 
-            <!-- Language Toggle Button (Right - Icon Only) -->
-            <button class="nav-control-btn" id="langToggleBtn" title="Translate / Language">
-                <svg viewBox="0 0 24 24" class="nav-btn-icon"><path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2.1l1.1-3h4.6l1.1 3H23l-4.5-12zm-2.6 7l1.6-4.33L19.1 17h-3.2z"/></svg>
-            </button>
+            <!-- Resume / CV Action Menu (Right Top Control) -->
+            <div class="cv-menu-container" id="cvMenuContainer">
+                <button class="nav-control-btn" id="resumeToggleBtn" title="Resume / CV Options">
+                    <span class="cv-btn-icon cv-icon-main">
+                        <svg viewBox="0 0 24 24" class="nav-btn-icon"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+                    </span>
+                    <span class="cv-btn-icon cv-icon-close">
+                        <svg viewBox="0 0 24 24" class="nav-btn-icon"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                    </span>
+                </button>
+                <div class="cv-dropdown-menu" id="cvDropdownMenu">
+                    <a href="Abdulrahman_Hussein_CV.pdf" target="_blank" rel="noopener noreferrer" class="cv-action-circle" title="View CV Online">
+                        <svg viewBox="0 0 24 24" class="nav-btn-icon"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                    </a>
+                    <a href="Abdulrahman_Hussein_CV.pdf" download="Abdulrahman_Hussein_CV.pdf" class="cv-action-circle" title="Download CV (PDF)">
+                        <svg viewBox="0 0 24 24" class="nav-btn-icon"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                    </a>
+                </div>
+            </div>
         </div>
 
         <!-- Main Profile Card -->
@@ -1192,12 +1332,12 @@
                 <span class="term-btn term-min"></span>
                 <span class="term-btn term-max"></span>
             </div>
-            <span class="term-title">Profile.DEV</span>
+            <span class="term-title">Abdulllrahman.Dev</span>
 
             <div class="avatar-container">
                 <div class="avatar-glow"></div>
                 <div class="avatar-wrap">
-                    <img class="avatar" src="https://res.cloudinary.com/duswlqjey/image/upload/A_H_Logo_dngd45.png" onerror="this.onerror=null; this.src='favicon.svg';" alt="Abdulrahman Hussein Logo" />
+                    <img class="avatar" src="https://res.cloudinary.com/duswlqjey/image/upload/f_auto,q_auto,w_250/A_H_Logo_dngd45.png" loading="eager" decoding="async" fetchpriority="high" onerror="this.onerror=null; this.src='favicon.svg';" alt="Abdulrahman Hussein Logo" />
                 </div>
             </div>
 
@@ -1419,6 +1559,27 @@
                 localStorage.setItem('theme', !isCurrentlyLight ? 'light' : 'dark');
             });
         }
+
+        // -----------------------------------------------------------
+        // CV / RESUME MENU INTERACTION HANDLER
+        // -----------------------------------------------------------
+        var cvMenuContainer = document.getElementById('cvMenuContainer');
+        var resumeToggleBtn = document.getElementById('resumeToggleBtn');
+
+        if (resumeToggleBtn && cvMenuContainer) {
+            resumeToggleBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                cvMenuContainer.classList.toggle('open');
+            });
+        }
+
+        document.addEventListener('click', function(e) {
+            if (cvMenuContainer && cvMenuContainer.classList.contains('open')) {
+                if (!cvMenuContainer.contains(e.target)) {
+                    cvMenuContainer.classList.remove('open');
+                }
+            }
+        });
 
         // -----------------------------------------------------------
         // SEAMLESS 100% INFINITE CURVED LOOP MARQUEE BANNER
