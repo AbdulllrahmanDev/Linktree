@@ -54,9 +54,105 @@
             --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        ::selection {
-            background: rgba(56, 189, 248, 0.25);
-            color: #ffffff;
+        body, .profile-card, .link-card, .nav-control-btn, .quick-action-pill, .circular-status-badge, .circular-text-svg text, #bg-canvas {
+            transition: background-color 0.5s var(--ease-out), color 0.5s var(--ease-out), border-color 0.5s var(--ease-out), box-shadow 0.5s var(--ease-out), opacity 0.5s var(--ease-out), filter 0.5s var(--ease-out);
+        }
+
+        /* Modern Crisp Light Theme Overrides */
+        body.light-mode {
+            --bg: #f8fafc;
+            --bg-card: rgba(255, 255, 255, 0.78);
+            --bg-card-hover: rgba(255, 255, 255, 0.96);
+            
+            --border-card: rgba(0, 0, 0, 0.08);
+            --border-hover: rgba(2, 132, 199, 0.5);
+            
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            
+            --accent-cyan: #0284c7;
+            --accent-emerald: #059669;
+            --accent-indigo: #4f46e5;
+            --glow-cyan: rgba(2, 132, 199, 0.15);
+        }
+
+        body.light-mode body::before {
+            background: radial-gradient(circle at 50% -10%, rgba(2, 132, 199, 0.08) 0%, rgba(99, 102, 241, 0.05) 45%, transparent 70%);
+        }
+
+        body.light-mode .profile-card,
+        body.light-mode .link-card {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        }
+
+        body.light-mode .profile-card:hover,
+        body.light-mode .link-card:hover {
+            box-shadow: 0 16px 40px rgba(2, 132, 199, 0.12), inset 0 1px 0 rgba(255, 255, 255, 1);
+        }
+
+        body.light-mode .nav-control-btn,
+        body.light-mode .quick-action-pill {
+            background: rgba(255, 255, 255, 0.88);
+            border: 1px solid rgba(0, 0, 0, 0.12);
+            color: #0f172a;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        }
+
+        body.light-mode .nav-control-btn:hover,
+        body.light-mode .quick-action-pill:hover {
+            background: #ffffff;
+            border-color: rgba(2, 132, 199, 0.45);
+            color: #0284c7;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(2, 132, 199, 0.18);
+        }
+
+        body.light-mode .circular-status-badge {
+            background: rgba(255, 255, 255, 0.88);
+            border: 1.5px solid rgba(16, 185, 129, 0.55);
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.18), 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        body.light-mode .circular-status-badge:hover {
+            background: #ffffff;
+            border-color: #10b981;
+            box-shadow: 0 6px 22px rgba(16, 185, 129, 0.3);
+        }
+
+        body.light-mode .circular-text-svg text {
+            fill: #065f46;
+            font-weight: 800;
+        }
+
+        body.light-mode .term-title {
+            color: #475569;
+        }
+
+        body.light-mode .bio-terminal {
+            background: rgba(2, 132, 199, 0.06);
+            border-color: rgba(2, 132, 199, 0.2);
+            box-shadow: inset 0 1px 2px rgba(2, 132, 199, 0.05);
+        }
+
+        body.light-mode .bio-prompt {
+            color: #059669;
+        }
+
+        body.light-mode .bio-prefix {
+            color: #0284c7;
+        }
+
+        body.light-mode .bio-text {
+            color: #0f172a;
+        }
+
+        body.light-mode #bg-canvas {
+            opacity: 0;
+        }
+
+        body.light-mode #light-bg-canvas {
+            opacity: 0.55;
         }
 
         html {
@@ -95,8 +191,8 @@
             z-index: 0;
         }
 
-        /* WebGL Background Canvas */
-        #bg-canvas {
+        /* WebGL Background Canvases */
+        #bg-canvas, #light-bg-canvas {
             position: fixed;
             top: 0;
             left: 0;
@@ -104,9 +200,17 @@
             height: 100vh;
             z-index: 0;
             pointer-events: none;
-            opacity: 0.85;
             transform: translateZ(0);
-            will-change: transform;
+            will-change: transform, opacity;
+            transition: opacity 0.6s var(--ease-out);
+        }
+
+        #bg-canvas {
+            opacity: 0.85;
+        }
+
+        #light-bg-canvas {
+            opacity: 0;
         }
 
         .page {
@@ -625,7 +729,7 @@
         }
 
         .link-card:hover .link-title {
-            color: #ffffff;
+            color: var(--accent-cyan);
         }
 
         .link-sub {
@@ -875,8 +979,9 @@
 </head>
 <body>
 
-    <!-- Lightweight High-Performance Galaxy Shader Canvas -->
+    <!-- WebGL Background Canvases (Dark Galaxy / Light Liquid Chrome) -->
     <canvas id="bg-canvas"></canvas>
+    <canvas id="light-bg-canvas"></canvas>
 
     <main class="page">
         
@@ -950,11 +1055,11 @@
             <div class="quick-actions-bar">
                 <a href="mailto:abdulllrahman.dev@gmail.com" class="quick-action-pill" title="Send Email">
                     <svg viewBox="0 0 24 24" class="action-icon"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-                    <span>Contact Me</span>
+                    <span>Send Mail</span>
                 </a>
-                <button id="shareProfileBtn" class="quick-action-pill" title="Share Profile">
-                    <svg viewBox="0 0 24 24" class="action-icon"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>
-                    <span>Share Profile</span>
+                <button id="saveContactBtn" class="quick-action-pill" title="Save Contact to Phone">
+                    <svg viewBox="0 0 24 24" class="action-icon"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-2.33 4.67-3.5 7-3.5s7 1.17 7 3.5V19z"/></svg>
+                    <span>Save Contact</span>
                 </button>
             </div>
         </header>
@@ -1074,20 +1179,75 @@
         var toast = document.getElementById('toast');
         var toastTimeout;
 
-        // Share Profile Button Handler
-        var shareBtn = document.getElementById('shareProfileBtn');
-        if (shareBtn) {
-            shareBtn.addEventListener('click', function() {
-                var url = window.location.href;
-                navigator.clipboard.writeText(url).then(function() {
-                    var toastMsg = document.getElementById('toastMsg');
-                    if (toastMsg) toastMsg.textContent = 'Profile link copied!';
-                    toast.classList.add('show');
-                    clearTimeout(toastTimeout);
-                    toastTimeout = setTimeout(function() {
-                        toast.classList.remove('show');
-                    }, 2200);
-                });
+        // Save Contact (vCard 3.0) Download Handler
+        var saveContactBtn = document.getElementById('saveContactBtn');
+        if (saveContactBtn) {
+            saveContactBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                var vcardContent = [
+                    'BEGIN:VCARD',
+                    'VERSION:3.0',
+                    'N:Hussein;Abdulrahman;;;',
+                    'FN:Abdulrahman Hussein',
+                    'TITLE:Full-Stack Web Developer',
+                    'TEL;TYPE=CELL,VOICE:+201062120142',
+                    'EMAIL;TYPE=INTERNET,HOME:abdulllrahman.dev@gmail.com',
+                    'URL:https://portfolio.abdullrahman.workers.dev/',
+                    'END:VCARD'
+                ].join('\r\n');
+
+                var blob = new Blob([vcardContent], { type: 'text/vcard;charset=utf-8;' });
+                var url = URL.createObjectURL(blob);
+                var link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'Abdulrahman_Hussein.vcf');
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                setTimeout(function() { URL.revokeObjectURL(url); }, 1000);
+
+                var toastMsg = document.getElementById('toastMsg');
+                if (toastMsg) toastMsg.textContent = 'vCard downloaded! Save to contacts.';
+                toast.classList.add('show');
+                clearTimeout(toastTimeout);
+                toastTimeout = setTimeout(function() {
+                    toast.classList.remove('show');
+                }, 2400);
+            });
+        }
+
+        // Theme Toggle Handler (Dark / Light Mode)
+        var themeToggleBtn = document.getElementById('themeToggleBtn');
+        var sunIconSVG = '<svg viewBox="0 0 24 24" class="nav-btn-icon"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/></svg>';
+        var moonIconSVG = '<svg viewBox="0 0 24 24" class="nav-btn-icon"><path d="M12.3 2a10 10 0 0 0 9.7 11.5 10 10 0 1 1-11.5-9.7 8.8 8.8 0 0 0 1.8-1.8z"/></svg>';
+
+        function applyTheme(isLight) {
+            if (isLight) {
+                document.body.classList.add('light-mode');
+                if (themeToggleBtn) {
+                    themeToggleBtn.innerHTML = moonIconSVG;
+                    themeToggleBtn.title = 'Switch to Dark Mode';
+                }
+            } else {
+                document.body.classList.remove('light-mode');
+                if (themeToggleBtn) {
+                    themeToggleBtn.innerHTML = sunIconSVG;
+                    themeToggleBtn.title = 'Switch to Light Mode';
+                }
+            }
+        }
+
+        // Restore saved theme preference
+        var savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            applyTheme(true);
+        }
+
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', function() {
+                var isCurrentlyLight = document.body.classList.contains('light-mode');
+                applyTheme(!isCurrentlyLight);
+                localStorage.setItem('theme', !isCurrentlyLight ? 'light' : 'dark');
             });
         }
 
@@ -1443,7 +1603,7 @@
 
             function render(t) {
                 requestAnimationFrame(render);
-                if (document.hidden) return;
+                if (document.hidden || document.body.classList.contains('light-mode')) return;
 
                 var timeSec = t * 0.001;
                 gl.uniform1f(uTimeLoc, timeSec);
@@ -1504,6 +1664,320 @@
                 profileCard.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
             });
         }
+        // -----------------------------------------------------------
+        // FLOATING LINES WEBGL SHADER (EXCLUSIVE LIGHT MODE BACKGROUND)
+        // -----------------------------------------------------------
+        (function initFloatingLines() {
+            var canvas = document.getElementById('light-bg-canvas');
+            if (!canvas) return;
+
+            var gl = canvas.getContext('webgl', { 
+                antialias: true, 
+                alpha: true,
+                preserveDrawingBuffer: false 
+            });
+            if (!gl) return;
+
+            var vertexShaderSource = `
+                attribute vec2 position;
+                attribute vec2 uv;
+                varying vec2 vUv;
+                void main() {
+                    vUv = uv;
+                    gl_Position = vec4(position, 0.0, 1.0);
+                }
+            `;
+
+            var fragmentShaderSource = `
+                precision highp float;
+
+                uniform float iTime;
+                uniform vec3  iResolution;
+                uniform float animationSpeed;
+
+                uniform bool enableTop;
+                uniform bool enableMiddle;
+                uniform bool enableBottom;
+
+                uniform int topLineCount;
+                uniform int middleLineCount;
+                uniform int bottomLineCount;
+
+                uniform float topLineDistance;
+                uniform float middleLineDistance;
+                uniform float bottomLineDistance;
+
+                uniform vec3 topWavePosition;
+                uniform vec3 middleWavePosition;
+                uniform vec3 bottomWavePosition;
+
+                uniform vec2 iMouse;
+                uniform bool interactive;
+                uniform float bendRadius;
+                uniform float bendStrength;
+                uniform float bendInfluence;
+
+                uniform bool parallax;
+                uniform float parallaxStrength;
+                uniform vec2 parallaxOffset;
+
+                uniform vec3 lineGradient[8];
+                uniform int lineGradientCount;
+
+                mat2 rotate(float r) {
+                    return mat2(cos(r), sin(r), -sin(r), cos(r));
+                }
+
+                vec3 getLineColor(float t) {
+                    if (lineGradientCount <= 0) return vec3(0.008, 0.518, 0.780);
+                    float clampedT = clamp(t, 0.0, 0.9999);
+                    float scaled = clampedT * float(lineGradientCount - 1);
+                    int idx = int(floor(scaled));
+                    float f = fract(scaled);
+                    
+                    vec3 c1 = lineGradient[0];
+                    vec3 c2 = lineGradient[1];
+                    if (idx == 1) { c1 = lineGradient[1]; c2 = lineGradient[2]; }
+                    else if (idx >= 2) { c1 = lineGradient[2]; c2 = lineGradient[2]; }
+                    
+                    return mix(c1, c2, f);
+                }
+
+                float wave(vec2 uv, float offset, vec2 screenUv, vec2 mouseUv, bool shouldBend) {
+                    float time = iTime * animationSpeed;
+
+                    float x_offset   = offset;
+                    float x_movement = time * 0.1;
+                    float amp        = sin(offset + time * 0.2) * 0.3;
+                    float y          = sin(uv.x + x_offset + x_movement) * amp;
+
+                    if (shouldBend) {
+                        vec2 d = screenUv - mouseUv;
+                        float influence = exp(-dot(d, d) * bendRadius);
+                        float bendOffset = (mouseUv.y - screenUv.y) * influence * bendStrength * bendInfluence;
+                        y += bendOffset;
+                    }
+
+                    float m = uv.y - y;
+                    return 0.0175 / max(abs(m) + 0.01, 1e-3) + 0.01;
+                }
+
+                void main() {
+                    vec2 fragCoord = gl_FragCoord.xy;
+                    vec2 baseUv = (2.0 * fragCoord - iResolution.xy) / iResolution.y;
+                    baseUv.y *= -1.0;
+
+                    if (parallax) {
+                        baseUv += parallaxOffset;
+                    }
+
+                    vec3 col = vec3(0.0);
+
+                    vec2 mouseUv = vec2(0.0);
+                    if (interactive) {
+                        mouseUv = (2.0 * iMouse - iResolution.xy) / iResolution.y;
+                    }
+
+                    if (enableBottom) {
+                        for (int i = 0; i < 10; ++i) {
+                            if (i >= bottomLineCount) break;
+                            float fi = float(i);
+                            float t = fi / max(float(bottomLineCount - 1), 1.0);
+                            vec3 lineCol = getLineColor(t);
+
+                            float angle = bottomWavePosition.z * log(length(baseUv) + 1.0);
+                            vec2 ruv = baseUv * rotate(angle);
+                            col += lineCol * wave(
+                                ruv + vec2(bottomLineDistance * fi + bottomWavePosition.x, bottomWavePosition.y),
+                                1.5 + 0.2 * fi,
+                                baseUv,
+                                mouseUv,
+                                interactive
+                            ) * 0.35;
+                        }
+                    }
+
+                    if (enableMiddle) {
+                        for (int i = 0; i < 10; ++i) {
+                            if (i >= middleLineCount) break;
+                            float fi = float(i);
+                            float t = fi / max(float(middleLineCount - 1), 1.0);
+                            vec3 lineCol = getLineColor(t);
+
+                            float angle = middleWavePosition.z * log(length(baseUv) + 1.0);
+                            vec2 ruv = baseUv * rotate(angle);
+                            col += lineCol * wave(
+                                ruv + vec2(middleLineDistance * fi + middleWavePosition.x, middleWavePosition.y),
+                                2.0 + 0.15 * fi,
+                                baseUv,
+                                mouseUv,
+                                interactive
+                            ) * 0.6;
+                        }
+                    }
+
+                    if (enableTop) {
+                        for (int i = 0; i < 10; ++i) {
+                            if (i >= topLineCount) break;
+                            float fi = float(i);
+                            float t = fi / max(float(topLineCount - 1), 1.0);
+                            vec3 lineCol = getLineColor(t);
+
+                            float angle = topWavePosition.z * log(length(baseUv) + 1.0);
+                            vec2 ruv = baseUv * rotate(angle);
+                            ruv.x *= -1.0;
+                            col += lineCol * wave(
+                                ruv + vec2(topLineDistance * fi + topWavePosition.x, topWavePosition.y),
+                                1.0 + 0.2 * fi,
+                                baseUv,
+                                mouseUv,
+                                interactive
+                            ) * 0.25;
+                        }
+                    }
+
+                    gl_FragColor = vec4(col, min(length(col) * 1.5, 0.85));
+                }
+            `;
+
+            function createShader(gl, type, source) {
+                var shader = gl.createShader(type);
+                gl.shaderSource(shader, source);
+                gl.compileShader(shader);
+                if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                    gl.deleteShader(shader);
+                    return null;
+                }
+                return shader;
+            }
+
+            var vertShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
+            var fragShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
+            if (!vertShader || !fragShader) return;
+
+            var program = gl.createProgram();
+            gl.attachShader(program, vertShader);
+            gl.attachShader(program, fragShader);
+            gl.linkProgram(program);
+            if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return;
+
+            gl.useProgram(program);
+
+            var positionBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+                -1, -1, 0, 0,
+                 1, -1, 1, 0,
+                -1,  1, 0, 1,
+                -1,  1, 0, 1,
+                 1, -1, 1, 0,
+                 1,  1, 1, 1
+            ]), gl.STATIC_DRAW);
+
+            var positionLoc = gl.getAttribLocation(program, 'position');
+            var uvLoc = gl.getAttribLocation(program, 'uv');
+            gl.enableVertexAttribArray(positionLoc);
+            gl.vertexAttribPointer(positionLoc, 2, gl.FLOAT, false, 16, 0);
+            gl.enableVertexAttribArray(uvLoc);
+            gl.vertexAttribPointer(uvLoc, 2, gl.FLOAT, false, 16, 8);
+
+            // Uniform Locations
+            var uTimeLoc = gl.getUniformLocation(program, 'iTime');
+            var uResLoc = gl.getUniformLocation(program, 'iResolution');
+            var uSpeedLoc = gl.getUniformLocation(program, 'animationSpeed');
+            var uEnableTopLoc = gl.getUniformLocation(program, 'enableTop');
+            var uEnableMiddleLoc = gl.getUniformLocation(program, 'enableMiddle');
+            var uEnableBottomLoc = gl.getUniformLocation(program, 'enableBottom');
+            var uTopCountLoc = gl.getUniformLocation(program, 'topLineCount');
+            var uMidCountLoc = gl.getUniformLocation(program, 'middleLineCount');
+            var uBotCountLoc = gl.getUniformLocation(program, 'bottomLineCount');
+            var uTopDistLoc = gl.getUniformLocation(program, 'topLineDistance');
+            var uMidDistLoc = gl.getUniformLocation(program, 'middleLineDistance');
+            var uBotDistLoc = gl.getUniformLocation(program, 'bottomLineDistance');
+            var uTopPosLoc = gl.getUniformLocation(program, 'topWavePosition');
+            var uMidPosLoc = gl.getUniformLocation(program, 'middleWavePosition');
+            var uBotPosLoc = gl.getUniformLocation(program, 'bottomWavePosition');
+            var uMouseLoc = gl.getUniformLocation(program, 'iMouse');
+            var uInteractiveLoc = gl.getUniformLocation(program, 'interactive');
+            var uBendRadiusLoc = gl.getUniformLocation(program, 'bendRadius');
+            var uBendStrengthLoc = gl.getUniformLocation(program, 'bendStrength');
+            var uBendInfLoc = gl.getUniformLocation(program, 'bendInfluence');
+            var uParallaxLoc = gl.getUniformLocation(program, 'parallax');
+            var uParallaxStrLoc = gl.getUniformLocation(program, 'parallaxStrength');
+            var uParallaxOffLoc = gl.getUniformLocation(program, 'parallaxOffset');
+            var uGradientLoc = gl.getUniformLocation(program, 'lineGradient');
+            var uGradCountLoc = gl.getUniformLocation(program, 'lineGradientCount');
+
+            // Uniform Values
+            gl.uniform1f(uSpeedLoc, 3.1);
+            gl.uniform1i(uEnableTopLoc, 1);
+            gl.uniform1i(uEnableMiddleLoc, 1);
+            gl.uniform1i(uEnableBottomLoc, 1);
+            gl.uniform1i(uTopCountLoc, 10);
+            gl.uniform1i(uMidCountLoc, 10);
+            gl.uniform1i(uBotCountLoc, 10);
+            gl.uniform1f(uTopDistLoc, 0.495);
+            gl.uniform1f(uMidDistLoc, 0.495);
+            gl.uniform1f(uBotDistLoc, 0.495);
+            gl.uniform3f(uTopPosLoc, 10.0, 0.5, -0.4);
+            gl.uniform3f(uMidPosLoc, 5.0, 0.0, 0.2);
+            gl.uniform3f(uBotPosLoc, 2.0, -0.7, -1.0);
+            gl.uniform1i(uInteractiveLoc, 1);
+            gl.uniform1f(uBendRadiusLoc, 28.0);
+            gl.uniform1f(uBendStrengthLoc, -12.0);
+            gl.uniform1f(uBendInfLoc, 1.0);
+            gl.uniform1i(uParallaxLoc, 1);
+            gl.uniform1f(uParallaxStrLoc, 0.2);
+
+            // Gradient Colors (Dark Royal Blue #143894, Cyan #38bdf8, Indigo #6366f1)
+            gl.uniform1i(uGradCountLoc, 3);
+            gl.uniform3fv(uGradientLoc, new Float32Array([
+                0.080, 0.220, 0.580,
+                0.220, 0.741, 0.973,
+                0.388, 0.400, 0.945
+            ]));
+
+            var mouseX = 0, mouseY = 0;
+            var targetParallaxX = 0, targetParallaxY = 0;
+            var currentParallaxX = 0, currentParallaxY = 0;
+
+            window.addEventListener('mousemove', function(e) {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                var cx = window.innerWidth / 2;
+                var cy = window.innerHeight / 2;
+                targetParallaxX = ((e.clientX - cx) / window.innerWidth) * 0.25;
+                targetParallaxY = ((e.clientY - cy) / window.innerHeight) * 0.25;
+            });
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                gl.viewport(0, 0, canvas.width, canvas.height);
+                gl.useProgram(program);
+                gl.uniform3f(uResLoc, canvas.width, canvas.height, 1.0);
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            var startTime = performance.now();
+            function render(now) {
+                requestAnimationFrame(render);
+                if (document.hidden || !document.body.classList.contains('light-mode')) return;
+
+                currentParallaxX += (targetParallaxX - currentParallaxX) * 0.05;
+                currentParallaxY += (targetParallaxY - currentParallaxY) * 0.05;
+
+                var elapsed = (now - startTime) * 0.001;
+                gl.useProgram(program);
+                gl.uniform1f(uTimeLoc, elapsed);
+                gl.uniform2f(uMouseLoc, mouseX, mouseY);
+                gl.uniform2f(uParallaxOffLoc, currentParallaxX, currentParallaxY);
+
+                gl.drawArrays(gl.TRIANGLES, 0, 6);
+            }
+            requestAnimationFrame(render);
+        })();
     </script>
 </body>
 </html>
