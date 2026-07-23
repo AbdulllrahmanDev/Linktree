@@ -1661,22 +1661,28 @@
                     window.location.href = 'data:text/x-vcard;charset=utf-8,' + encodeURIComponent(vcardContent);
                 } else if (isAndroid) {
                     // For Android, use an Intent to open the native Contacts app directly
-                    var intentUrl = 'intent:#Intent;' +
+                    var intentUrl = 'intent://contacts/insert/#Intent;' +
                         'action=android.intent.action.INSERT;' +
                         'type=vnd.android.cursor.dir/contact;' +
                         'S.name=Abdulrahman%20Hussein;' +
                         'S.phone=%2B201062120142;' +
                         'S.email=abdulllrahman.dev@gmail.com;' +
                         'S.job_title=Full-Stack%20Web%20Developer;' +
+                        'scheme=content;' +
                         'end;';
                     
-                    // Fallback to Blob download if Intent is blocked
-                    try {
-                        window.location.href = intentUrl;
-                    } catch (e) {
-                        fallbackDownload();
-                    }
-                    setTimeout(fallbackDownload, 500);
+                    var intentLink = document.createElement('a');
+                    intentLink.href = intentUrl;
+                    document.body.appendChild(intentLink);
+                    intentLink.click();
+                    document.body.removeChild(intentLink);
+                    
+                    // Fallback to Blob download if Intent fails (i.e. browser remains visible)
+                    setTimeout(function() {
+                        if (!document.hidden) {
+                            fallbackDownload();
+                        }
+                    }, 1500);
                 } else {
                     fallbackDownload();
                 }
